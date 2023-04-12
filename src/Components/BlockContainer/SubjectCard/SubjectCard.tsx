@@ -4,7 +4,7 @@ import { ObjectId } from "mongoose";
 
 export interface ISubjectCard {
 	name: string;
-	_id: ObjectId;
+	_id?: ObjectId;
 }
 
 const SubjectCard: React.FC<ISubjectCard> = (props: ISubjectCard) => {
