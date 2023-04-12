@@ -1,0 +1,12 @@
+.hero {
+	padding-top: 65px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.hero-title {
+	padding-bottom: 10px;
+	font-size: 20px;
+}
