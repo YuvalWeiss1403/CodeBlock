@@ -12,7 +12,7 @@ export interface IBlock {
 
 const CodeBlockData = async () => {
 	try {
-		const response = await fetch("http://localhost:8000/codeblock", {
+		const response = await fetch("http://localhost:3001/codeblock", {
 			method: "GET",
 		});
 		const data = await response.json();

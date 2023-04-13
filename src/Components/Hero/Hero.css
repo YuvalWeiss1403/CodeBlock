@@ -1,5 +1,5 @@
 .hero {
-	padding-top: 65px;
+	padding-top: 100px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -7,6 +7,9 @@
 }
 
 .hero-title {
-	padding-bottom: 10px;
-	font-size: 20px;
+	font-size: 30px;
+	color: white;
+	font-weight: 600;
+	letter-spacing: 1.67px;
+	padding-bottom: 20px;
 }

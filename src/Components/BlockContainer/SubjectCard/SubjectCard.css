@@ -1,0 +1,18 @@
+.subject-card {
+	width: 150px;
+	height: 150px;
+	background-color: rgb(31, 31, 141);
+	border-radius: 5px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	text-transform: uppercase;
+	letter-spacing: 0.67px;
+	box-shadow: 0px 0px 25px hsl(0deg 2.65% 26.85%);
+}
+
+.subject-card:hover {
+	cursor: pointer;
+	font-weight: 600;
+}

@@ -10,11 +10,15 @@
 	box-shadow: 0px 0px 25px hsla(0, 0%, 69%, 1.25);
 	overflow-y: hidden;
 	letter-spacing: 0.67px;
-	background-color: white;
+	background-color: rgb(69, 22, 113);
+	position: absolute;
+	top: 0;
 }
 
 .home-page-button {
 	background-color: transparent;
+	color: white;
+	text-transform: uppercase;
 	border: 0;
 	font-size: 20px;
 }
