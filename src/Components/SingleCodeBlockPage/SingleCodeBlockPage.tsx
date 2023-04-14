@@ -53,7 +53,7 @@
 import "./SingleCodeBlockPage.css";
 import Navbar from "../NavBar/NavBar";
 import { useParams } from "react-router-dom";
-import { useRef, useState } from "react"; // Import useRef instead of useEffect
+import { useEffect, useRef, useState } from "react"; // Import useRef instead of useEffect
 import { Socket, io } from "socket.io-client";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
@@ -80,7 +80,7 @@ const SingleCodeBlockPage: React.FC = () => {
 
 	const sendMessage = () => {
 		setLoggedIn(true);
-		socketRef.current?.emit("join_room", MySubject); // Access the socket via the ref
+		socketRef.current?.emit("send_message", MySubject); // Access the socket via the ref
 	};
 
 	// Replace useEffect with useRef
@@ -90,6 +90,13 @@ const SingleCodeBlockPage: React.FC = () => {
 			socketRef.current?.disconnect(); // Cleanup function to disconnect the socket on unmount
 		};
 	});
+	useEffect(() => {
+		socketRef.current = io(CONNECTION_PORT);
+	}, [CONNECTION_PORT]);
+
+	useEffect(() => {
+		socketRef.current?.emit("join_room", MySubject); // Access the socket via the ref
+	}, []);
 
 	return (
 		<div className="code-block-page">
