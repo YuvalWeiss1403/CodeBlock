@@ -7,6 +7,23 @@
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
+	padding-top: 100px;
+}
+.note-permissions {
+	background-color: rgba(240, 248, 255, 0.675);
+	color: #282c34;
+	border-radius: 5px;
+	display: flex;
+	padding: 5px;
+	align-items: flex-end;
+	justify-self: flex-end;
+}
+
+.subject-title {
+	font-size: 30px;
+	color: white;
+	font-weight: 400;
+	letter-spacing: 1.67px;
 }
 
 .code-area {
@@ -14,13 +31,4 @@
 	height: 60%;
 	color: white;
 	background-color: #282c34;
-}
-
-.subject-title {
-	padding-bottom: 10px;
-	font-size: 30px;
-	color: white;
-	font-weight: 400;
-	letter-spacing: 1.67px;
-	padding-bottom: 20px;
 }

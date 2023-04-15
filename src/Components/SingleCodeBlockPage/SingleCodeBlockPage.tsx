@@ -61,7 +61,6 @@ import { IBlock } from "../../store/slices/BlocksSlice";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { ObjectId } from "mongoose";
 import axios from "axios";
 
 const SingleCodeBlockPage: React.FC = () => {
@@ -71,7 +70,9 @@ const SingleCodeBlockPage: React.FC = () => {
 		return sub?._id?.toString() === subjectId;
 	});
 	const MySubject = currentData[0];
-	const [TextCode, setTextCode] = useState(MySubject.code);
+	const [CurrentCodeBlock, setCurrentCodeBlock] = useState<IBlock>(MySubject);
+	const [TextCode, setTextCode] = useState<string>(MySubject.code);
+	const [SaveChanges, setSaveChanges] = useState<boolean>(false);
 	const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(
 		null
 	);
@@ -93,11 +94,22 @@ const SingleCodeBlockPage: React.FC = () => {
 		}
 	};
 
-	const sendMessage = (e: React.MouseEvent<HTMLElement>) => {
-		socketRef.current?.emit("send_message", MySubject);
+	const UpdateServer = (e: React.MouseEvent<HTMLElement>) => {
 		if (subjectId) {
 			UpdateCodeBlock(subjectId, TextCode);
 		}
+		setSaveChanges(true);
+		setTimeout(() => {
+			setSaveChanges(false);
+		}, 1500);
+	};
+
+	const handelTextChange = (e: string) => {
+		setCurrentCodeBlock((CurrentCodeBlock) => ({
+			...CurrentCodeBlock,
+			code: e,
+		}));
+		socketRef.current?.emit("codeBlock", subjectId, TextCode);
 	};
 
 	useRef(() => {
@@ -112,31 +124,35 @@ const SingleCodeBlockPage: React.FC = () => {
 	}, [CONNECTION_PORT]);
 
 	useEffect(() => {
-		socketRef.current?.emit("join_room", MySubject); // Access the socket via the ref
-	}, []);
+		socketRef.current?.emit("join_room", CurrentCodeBlock);
+		socketRef.current?.on("codeBlock", (CurrentCode) => {
+			setTextCode(CurrentCode);
+		});
+	}, [socketRef]);
 
 	useEffect(() => {
-		socketRef.current?.emit("join_room", MySubject); // Access the socket via the ref
-		socketRef.current?.on("send_message", (MySubject) => {
-			setTextCode(MySubject.code);
-		});
-
-		return () => {
-			socketRef.current?.off("send_message");
-		};
-	}, [socketRef]);
+		socketRef.current?.emit("codeBlock", subjectId, TextCode);
+		handelTextChange(TextCode);
+	}, [TextCode]);
 
 	return (
 		<div className="code-block-page">
 			<Navbar />
 			<div className="subject-title">{MySubject.title}</div>
+			<div className="note-permissions">
+				{MySubject.isMentor ? "Readonly" : "Read ,Write"}
+			</div>
 			<CodeMirror
 				className="code-area"
 				value={TextCode}
-				onChange={(e) => setTextCode(e)}
+				onChange={async (e) => {
+					await setTextCode(e);
+				}}
 				theme="dark"
 				extensions={[javascript({ jsx: true })]}></CodeMirror>
-			<button onClick={(e) => sendMessage(e)}>submit</button>
+			<button onClick={(e) => UpdateServer(e)}>
+				{SaveChanges ? "Saved!" : "Save Changes"}
+			</button>
 		</div>
 	);
 };
