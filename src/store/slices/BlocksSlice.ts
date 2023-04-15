@@ -22,8 +22,6 @@ const CodeBlockData = async () => {
 
 const codeBlocks1: IBlock[] = await CodeBlockData();
 
-console.log(codeBlocks1);
-
 export const BlocksSlice = createSlice({
 	name: "BlocksData",
 	initialState: {

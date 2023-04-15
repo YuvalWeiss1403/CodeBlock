@@ -61,35 +61,52 @@ import { IBlock } from "../../store/slices/BlocksSlice";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
+import { ObjectId } from "mongoose";
+import axios from "axios";
 
 const SingleCodeBlockPage: React.FC = () => {
 	let { subjectId } = useParams<string>();
-	const [loggedIn, setLoggedIn] = useState(false);
 	const data = useSelector((state: RootState) => state.BlocksData?.value);
 	const currentData = data?.filter((sub: IBlock) => {
 		return sub?._id?.toString() === subjectId;
 	});
 	const MySubject = currentData[0];
 	const [TextCode, setTextCode] = useState(MySubject.code);
-
 	const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(
 		null
-	); // Create a ref for socket
-
+	);
 	const CONNECTION_PORT = "localhost:3001/";
 
-	const sendMessage = () => {
-		setLoggedIn(true);
-		socketRef.current?.emit("send_message", MySubject); // Access the socket via the ref
+	const UpdateCodeBlock = async (_id: string, newCode: string) => {
+		try {
+			const response = await axios.put(
+				"http://localhost:3001/codeblock/",
+				{ _id: _id, newCode: newCode },
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+		} catch (error: any) {
+			alert(error.response.data);
+		}
 	};
 
-	// Replace useEffect with useRef
+	const sendMessage = (e: React.MouseEvent<HTMLElement>) => {
+		socketRef.current?.emit("send_message", MySubject);
+		if (subjectId) {
+			UpdateCodeBlock(subjectId, TextCode);
+		}
+	};
+
 	useRef(() => {
-		socketRef.current = io(CONNECTION_PORT); // Assign the socket instance to the ref
+		socketRef.current = io(CONNECTION_PORT);
 		return () => {
-			socketRef.current?.disconnect(); // Cleanup function to disconnect the socket on unmount
+			socketRef.current?.disconnect();
 		};
 	});
+
 	useEffect(() => {
 		socketRef.current = io(CONNECTION_PORT);
 	}, [CONNECTION_PORT]);
@@ -97,6 +114,17 @@ const SingleCodeBlockPage: React.FC = () => {
 	useEffect(() => {
 		socketRef.current?.emit("join_room", MySubject); // Access the socket via the ref
 	}, []);
+
+	useEffect(() => {
+		socketRef.current?.emit("join_room", MySubject); // Access the socket via the ref
+		socketRef.current?.on("send_message", (MySubject) => {
+			setTextCode(MySubject.code);
+		});
+
+		return () => {
+			socketRef.current?.off("send_message");
+		};
+	}, [socketRef]);
 
 	return (
 		<div className="code-block-page">
@@ -108,7 +136,7 @@ const SingleCodeBlockPage: React.FC = () => {
 				onChange={(e) => setTextCode(e)}
 				theme="dark"
 				extensions={[javascript({ jsx: true })]}></CodeMirror>
-			<button onClick={() => sendMessage()}>submit</button>
+			<button onClick={(e) => sendMessage(e)}>submit</button>
 		</div>
 	);
 };
