@@ -4,7 +4,7 @@ import { ObjectId } from "mongoose";
 export interface IBlock {
 	title: string;
 	code: string;
-	usersConnected: string;
+	usersConnected: number;
 	isMentor: boolean;
 	_id?: ObjectId;
 	codeBlocks?: any;
