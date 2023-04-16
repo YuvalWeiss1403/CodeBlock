@@ -4,3 +4,18 @@
 	box-sizing: border-box;
 	background-color: rgb(69, 22, 113);
 }
+.home-page::-webkit-scrollbar {
+	width: 100%;
+}
+
+.home-page::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.home-page::-webkit-scrollbar-thumb {
+	background: transparent;
+}
+
+.home-page::-webkit-scrollbar-thumb:hover {
+	background: transparent;
+}
