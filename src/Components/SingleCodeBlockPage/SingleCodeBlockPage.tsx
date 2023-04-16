@@ -29,7 +29,7 @@ const SingleCodeBlockPage: React.FC = () => {
 	const UpdateCodeBlock = async (_id: string, newCode: string) => {
 		try {
 			const response = await axios.put(
-				"https://codeblock-server.onrender.com/codeblock",
+				"http://localhost:3001/codeblock/",
 				{ _id: _id, newCode: newCode },
 				{
 					headers: {
@@ -63,6 +63,7 @@ const SingleCodeBlockPage: React.FC = () => {
 	useRef(() => {
 		socketRef.current = io(CONNECTION_PORT);
 		return () => {
+			socketRef.current?.emit("disconnect", CurrentCodeBlock);
 			socketRef.current?.disconnect();
 		};
 	});
@@ -75,6 +76,9 @@ const SingleCodeBlockPage: React.FC = () => {
 		socketRef.current?.emit("join_room", CurrentCodeBlock);
 		socketRef.current?.on("codeBlock", (CurrentCode) => {
 			setTextCode(CurrentCode);
+		});
+		socketRef.current?.on("usersConnected", (CurrentData: IBlock) => {
+			setCurrentCodeBlock(CurrentData);
 		});
 	}, [socketRef]);
 
