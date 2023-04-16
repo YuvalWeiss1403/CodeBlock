@@ -7,7 +7,7 @@
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
-	padding-top: 100px;
+	padding-top: 30px;
 }
 .note-permissions {
 	background-color: rgba(240, 248, 255, 0.675);
@@ -31,4 +31,20 @@
 	height: 60%;
 	color: white;
 	background-color: #282c34;
+}
+
+.code-area ::-webkit-scrollbar {
+	width: 100%;
+}
+
+.code-area ::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.code-area ::-webkit-scrollbar-thumb {
+	background: transparent;
+}
+
+.code-area ::-webkit-scrollbar-thumb:hover {
+	background: transparent;
 }

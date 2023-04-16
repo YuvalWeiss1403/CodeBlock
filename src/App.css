@@ -3,3 +3,19 @@
 	font-family: "Montserrat", sans-serif;
 	overflow-x: hidden;
 }
+
+body::-webkit-scrollbar {
+	width: 100%;
+}
+
+body::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+body::-webkit-scrollbar-thumb {
+	background: transparent;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+	background: transparent;
+}

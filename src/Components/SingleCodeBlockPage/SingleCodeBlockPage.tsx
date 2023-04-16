@@ -8,7 +8,7 @@ import { RootState } from "../../store/store";
 import { IBlock } from "../../store/slices/BlocksSlice";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import CodeMirror from "@uiw/react-codemirror";
-import { javascript } from "@codemirror/lang-javascript";
+import { javascript, typescriptLanguage } from "@codemirror/lang-javascript";
 import axios from "axios";
 
 const SingleCodeBlockPage: React.FC = () => {
@@ -90,14 +90,26 @@ const SingleCodeBlockPage: React.FC = () => {
 			<div className="note-permissions">
 				{CurrentCodeBlock.isMentor ? "Readonly" : "Read ,Write"}
 			</div>
-			<CodeMirror
-				className="code-area"
-				value={TextCode}
-				onChange={async (e) => {
-					await setTextCode(e);
-				}}
-				theme="dark"
-				extensions={[javascript({ jsx: true })]}></CodeMirror>
+			{CurrentCodeBlock.usersConnected != 1 && (
+				<CodeMirror
+					className="code-area"
+					value={TextCode}
+					onChange={async (e) => {
+						await setTextCode(e);
+					}}
+					theme="dark"
+					extensions={[javascript({ jsx: true })]}></CodeMirror>
+			)}
+			{CurrentCodeBlock.usersConnected === 1 && (
+				<CodeMirror
+					className="code-area"
+					value={TextCode}
+					onChange={async (e) => {
+						await setTextCode(e);
+					}}
+					theme="dark"
+					extensions={[javascript({ jsx: true })]}></CodeMirror>
+			)}
 			<button onClick={(e) => UpdateServer(e)}>
 				{SaveChanges ? "Saved!" : "Save Changes"}
 			</button>
