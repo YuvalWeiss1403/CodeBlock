@@ -29,7 +29,7 @@ const SingleCodeBlockPage: React.FC = () => {
 	const UpdateCodeBlock = async (_id: string, newCode: string) => {
 		try {
 			const response = await axios.put(
-				"http://localhost:3001/codeblock/",
+				"https://codeblock-server.onrender.com/codeblock",
 				{ _id: _id, newCode: newCode },
 				{
 					headers: {
